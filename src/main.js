@@ -2,18 +2,16 @@ import "./reset.css";
 import "./style.css";
 import "./fonts.css";
 
-import { Falcos } from "./falcos";
+import { Falcos } from "./falcos.js";
 
-const falcos = new Falcos(1920, 1080, {
+const WIDTH = 1920;
+const HEIGHT = 1080
 
-});
-
-const output = document.getElementById("output");
-output.width = 1920;
-output.height = 1080;
-const ctx = output.getContext("2d");
-
-let ready = false;
+const falcos = new Falcos(WIDTH, HEIGHT);
+const preview = document.getElementById("preview");
+preview.width = WIDTH;
+preview.height = HEIGHT;
+const ctx = preview.getContext("2d");
 
 const promises = [
     document.fonts.ready,
@@ -23,6 +21,5 @@ falcos.initializeFont("16px Montserrat-SemiBold");
 falcos.initializeFont("16px LinLibertineCapitalsB");
 
 Promise.all(promises).then(() => {
-    ready = true;
     ctx.drawImage(falcos.generate("New Decade Resolutions Testing", ["Seancris Luyun", "Aidan Andres", "Hameed Abdul"]), 0, 0);
 });
