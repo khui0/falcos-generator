@@ -39,12 +39,12 @@ fileInput.addEventListener("change", () => {
     }
 });
 
-document.getElementById("left").addEventListener("click", () => {
+document.getElementById("preview-left").addEventListener("click", () => {
     previewIndex--;
     update();
 });
 
-document.getElementById("right").addEventListener("click", () => {
+document.getElementById("preview-right").addEventListener("click", () => {
     previewIndex++;
     update();
 });
@@ -54,13 +54,33 @@ document.getElementById("preview-index").addEventListener("input", e => {
     update();
 });
 
-function update() {
-    previewIndex = clamp(previewIndex, 0, data.length - 1);
-    const story = data[previewIndex];
-    ctx.drawImage(falcos.generate(story.title, story.nominees), 0, 0);
+document.getElementById("name-style").addEventListener("input", () => {
+    update();
+});
 
-    document.getElementById("preview-index").value = previewIndex;
-    document.getElementById("preview-info").textContent = story.title;
+document.getElementById("custom-rows").addEventListener("input", () => {
+    update();
+});
+
+function update() {
+    if (data && ready) {
+        previewIndex = clamp(previewIndex, 0, data.length - 1);
+        const story = data[previewIndex];
+
+        let nominees = story.nominees;
+
+        const nameStyle = document.getElementById("name-style").value;
+        if (nameStyle == "init-first") {
+            nominees = story.nominees.map(item => initialFirst(item));
+        } else if (nameStyle == "init-last") {
+            nominees = story.nominees.map(item => initialLast(item));
+        }
+
+        ctx.drawImage(falcos.generate(story.title, nominees), 0, 0);
+
+        document.getElementById("preview-index").value = previewIndex;
+        document.getElementById("preview-info").textContent = story.title;
+    }
 }
 
 function parseCSV(raw) {
@@ -105,4 +125,22 @@ function columnToIndex(column) {
 
 function clamp(num, min, max) {
     return Math.min(Math.max(num, min), max);
+}
+
+function initialFirst(name) {
+    const parts = name.split(" ");
+    if (parts.length == 2) {
+        return `${parts[0].substring(0, 1)}. ${parts[1]}`;
+    } else {
+        return name;
+    }
+}
+
+function initialLast(name) {
+    const parts = name.split(" ");
+    if (parts.length == 2) {
+        return `${parts[0]} ${parts[1].substring(0, 1)}.`;
+    } else {
+        return name;
+    }
 }

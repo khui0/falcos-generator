@@ -18,8 +18,8 @@
     <h1>Falcosinator 1000</h1>
     <canvas id="preview"></canvas>
     <div id="preview-controls">
-        <button class="icon" id="left"><i class="ri-arrow-left-s-line"></i></button>
-        <button class="icon" id="right"><i class="ri-arrow-right-s-line"></i></button>
+        <button class="icon" id="preview-left"><i class="ri-arrow-left-s-line"></i></button>
+        <button class="icon" id="preview-right"><i class="ri-arrow-right-s-line"></i></button>
         <input type="number" id="preview-index">
         <p id="preview-info"></p>
     </div>
@@ -28,6 +28,19 @@
         Upload (CSV)
         <input type="file" id="file" accept=".csv">
     </label>
+    <label>
+        Names
+        <select id="name-style">
+            <option value="full">Full</option>
+            <option value="init-first">Initialed First</option>
+            <option value="init-last">Initialed Last</option>
+        </select>
+    </label>
+    <label>
+        Rows
+        <input type="text" placeholder="e.g. 0-2, 11-22" id="custom-rows">
+    </label>
+    <button class="pill">Download Zip</button>
     <script type="module" src="./src/main.js"></script>
 </body>
 
