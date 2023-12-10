@@ -22,6 +22,7 @@ let ready = false;
 
 let data;
 let previewIndex = 0;
+let indexes;
 
 Promise.all(promises).then(() => {
     ready = true;
@@ -58,14 +59,23 @@ document.getElementById("name-style").addEventListener("input", () => {
     update();
 });
 
-document.getElementById("custom-rows").addEventListener("input", () => {
+document.getElementById("custom-rows").addEventListener("input", e => {
     update();
+    indexes = parseRange(e.target.value);
 });
 
 function update() {
     if (data && ready) {
-        previewIndex = clamp(previewIndex, 0, data.length - 1);
-        const story = data[previewIndex];
+        let index;
+        if (indexes && indexes.length > 0) {
+            previewIndex = clamp(previewIndex, 0, indexes.length - 1)
+            index = indexes[previewIndex];
+
+        } else {
+            previewIndex = clamp(previewIndex, 0, data.length - 1)
+            index = previewIndex;
+        }
+        const story = data[index];
 
         let nominees = story.nominees;
 
@@ -78,7 +88,7 @@ function update() {
 
         ctx.drawImage(falcos.generate(story.title, nominees), 0, 0);
 
-        document.getElementById("preview-index").value = previewIndex;
+        document.getElementById("preview-index").value = index;
         document.getElementById("preview-info").textContent = story.title;
     }
 }
@@ -143,4 +153,26 @@ function initialLast(name) {
     } else {
         return name;
     }
+}
+
+function parseRange(string) {
+    const ranges = string.split(",")
+        .map(item => item.trim())
+        .filter(item => /^[0-9]+-[0-9]+$/m.test(item) || /^[0-9]+$/m.test(item));
+    const indexes = [];
+    ranges.forEach(range => {
+        range = range.split("-").map(num => parseInt(num));
+        if (range.length == 2) {
+            for (let i = range[0]; i <= range[1]; i++) {
+                if (!indexes.includes(i)) {
+                    indexes.push(i);
+                }
+            }
+        } else {
+            if (!indexes.includes(range[0])) {
+                indexes.push(range[0]);
+            }
+        }
+    });
+    return indexes;
 }
