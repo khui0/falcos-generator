@@ -13,6 +13,9 @@
     "vite-plugin-webfont-dl": "^3.9.1"
   },
   "dependencies": {
-    "remixicon": "^3.7.0"
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "remixicon": "^3.7.0",
+    "sanitize-filename": "^1.6.3"
   }
 }

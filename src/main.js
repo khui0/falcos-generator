@@ -5,6 +5,10 @@ import "remixicon/fonts/remixicon.css";
 
 import { Falcos } from "./falcos.js";
 
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import sanitize from "sanitize-filename";
+
 const WIDTH = 1920;
 const HEIGHT = 1080
 
@@ -22,7 +26,7 @@ let ready = false;
 
 let data;
 let previewIndex = 0;
-let indexes;
+let indexes = [];
 
 Promise.all(promises).then(() => {
     ready = true;
@@ -64,6 +68,8 @@ document.getElementById("custom-rows").addEventListener("input", e => {
     indexes = parseRange(e.target.value);
 });
 
+document.getElementById("download").addEventListener("click", download);
+
 function update() {
     if (data && ready) {
         let index;
@@ -90,6 +96,38 @@ function update() {
 
         document.getElementById("preview-index").value = index;
         document.getElementById("preview-info").textContent = story.title;
+    }
+}
+
+function download() {
+    if (data && ready) {
+        const zip = new JSZip();
+
+        // Populate indexes if no range is provided
+        if (indexes.length == 0) {
+            indexes = parseRange(`0-${data.length - 1}`);
+        }
+
+        for (let i = 0; i < indexes.length; i++) {
+            const index = indexes[i];
+            const story = data[index];
+
+            let nominees = story.nominees;
+
+            const nameStyle = document.getElementById("name-style").value;
+            if (nameStyle == "init-first") {
+                nominees = story.nominees.map(item => initialFirst(item));
+            } else if (nameStyle == "init-last") {
+                nominees = story.nominees.map(item => initialLast(item));
+            }
+
+            const image = falcos.generate(story.title, nominees).toDataURL().replace("data:image/png;base64,", "");
+            zip.file(sanitize(`${index}-${story.title}`) + ".png", image, { base64: true });
+        }
+
+        zip.generateAsync({ type: "blob" }).then(content => {
+            saveAs(content, "falcos.zip");
+        });
     }
 }
 
