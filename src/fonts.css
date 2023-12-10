@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "Montserrat-SemiBold";
+    font-weight: 600;
+    src: url(public/Montserrat-SemiBold.woff2);
+}
+
+@font-face {
+    font-family: "LinLibertineCapitalsB";
+    font-weight: 700;
+    src: url(public/LinLibertineCapitalsB.woff2);
+}
