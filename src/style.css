@@ -2,8 +2,10 @@
     color-scheme: dark;
     --text-color: white;
     --background-color: #0f0f0f;
-    --surface-color: #272727;
-    --surface-hover: #3d3d3d;
+    --input-color: #121212;
+    --control-color: #272727;
+    --control-hover-color: #3d3d3d;
+    --border-color: #303030;
     --accent-color: #b22323;
 }
 
@@ -40,18 +42,42 @@ select {
     height: 2em;
     padding: 0 0.5em;
     color: var(--text-color);
-    background-color: var(--surface-color);
+    background-color: var(--control-color);
     border: none;
     border-radius: 0.5rem;
+}
+
+textarea {
+    padding: 0.25em 0.5em;
+    color: var(--text-color);
+    background-color: var(--input-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    resize: none;
 }
 
 button {
     height: 2em;
     padding: 0 1em;
     color: var(--text-color);
-    background-color: var(--surface-color);
+    background-color: var(--control-color);
     border: none;
     border-radius: 0.5rem;
+}
+
+button.icon {
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    border-radius: 50%;
+}
+
+button.icon>i {
+    font-size: 1.25em;
+}
+
+button.pill {
+    border-radius: 100vh;
 }
 
 a {
@@ -59,9 +85,11 @@ a {
     width: fit-content;
 }
 
-button:hover {
-    background-color: var(--surface-hover);
-    transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1);
+@media (hover: hover) {
+    button:hover {
+        background-color: var(--control-hover-color);
+        transition: background-color 200ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
 }
 
 #preview {
@@ -69,4 +97,15 @@ button:hover {
     width: 100%;
     background-color: #252525;
     border-radius: 0.5rem;
+}
+
+#preview-index {
+    width: 4rem;
+}
+
+#preview-controls {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    align-items: center;
 }
